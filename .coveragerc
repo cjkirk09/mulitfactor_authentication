@@ -1,0 +1,3 @@
+[run]
+source = multifactor_authentication
+omit = multifactor_authentication/test*

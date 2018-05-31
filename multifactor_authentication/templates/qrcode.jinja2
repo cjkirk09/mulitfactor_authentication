@@ -1,0 +1,18 @@
+{% extends "layout.jinja2" %}
+
+{% block content %}
+<div class="content">
+    <h1><span class="font-semi-bold">Two-Factor Authentication</span></h1>
+
+    <h3>Create new Two-Factor secret</h3>
+    <div class="page">
+        <div class="qrcode">
+            <img src="{{ qrcode }}">
+        </div>
+        <div>The secret: {{ secret }}</div>
+        <div onclick="window.location.href = '/'" class="button div-button margin-center">
+            Done
+        </div>
+    </div>
+</div>
+{% endblock content %}
