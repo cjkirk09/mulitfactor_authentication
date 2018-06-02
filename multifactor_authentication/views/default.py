@@ -12,7 +12,7 @@ from ..models import UserSecret
 def my_view(request):
     try:
         query = request.dbsession.query(UserSecret)
-        one = query.filter(UserSecret.name == 'one').first()
+        one = query.filter(UserSecret.username == 'one').first()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'one': one, 'project': 'multifactor_authentication'}
@@ -29,10 +29,10 @@ def authenticate(request):
         username = payload.get(u'username')
         code = payload.get(u'code')
         query = request.dbsession.query(UserSecret)
-        user_secret = query.filter(UserSecret.name == username).one_or_none()
+        user_secret = query.filter(UserSecret.username == username).one_or_none()
         if not user_secret:
             return {u'success': False}
-        totp = pyotp.TOTP(user_secret.value)
+        totp = pyotp.TOTP(user_secret.secret)
         success = totp.verify(code)
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
@@ -48,17 +48,17 @@ def createSecret(request):
     """
     username = request.matchdict['username']
     secret = pyotp.random_base32()
-    user_secret = request.dbsession.query(UserSecret).filter(UserSecret.name == username).one_or_none()
+    user_secret = request.dbsession.query(UserSecret).filter(UserSecret.username == username).one_or_none()
     if user_secret:
-        user_secret.value = secret
+        user_secret.secret = secret
     else:
-        user_secret = UserSecret(name=username, value=secret)
+        user_secret = UserSecret(username=username, secret=secret)
         request.dbsession.add(user_secret)
 
     request.dbsession.flush()
     totp = pyotp.TOTP(secret)
     qr_data = totp.provisioning_uri('My TwoFactor Authentication') # this will be the entry name in the Google Authenticator App
-    qr_src = 'http://chart.apis.google.com/chart?cht=qr&chs=250x250&chl={0}'.format(qr_data)
+    qr_src = 'http://chart.apis.google.com/chart?cht=qr&chs=250x250&chl={0}'.format(qr_data)  # This is the qrcode url
     return {'qrcode': qr_src, 'secret': secret}
 
 

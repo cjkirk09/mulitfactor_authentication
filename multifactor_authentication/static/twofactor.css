@@ -1,0 +1,21 @@
+.myrow {
+    display: flex;
+    justify-content: space-between;
+    width: 350px;
+    padding-top: 10px;
+}
+.myinput {
+    width: 180px;
+}
+.flex-end {
+    justify-content: flex-end;
+}
+.padding-right {
+    padding-right: 10px;
+}
+.qr-row {
+    width: 250px;
+}
+.create-row {
+    width: 270px;
+}

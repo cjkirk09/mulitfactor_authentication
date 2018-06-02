@@ -9,10 +9,10 @@ from .meta import Base
 
 
 class UserSecret(Base):
-    __tablename__ = 'usersecret'
+    __tablename__ = 'user_secrets'
     id = Column(Integer, primary_key=True)
-    name = Column(Text)
-    value = Column(Text)
+    username = Column(Text)
+    secret = Column(Text)
 
 
-Index('my_index', UserSecret.name, unique=True, mysql_length=255)
+Index('my_index', UserSecret.username, unique=True, mysql_length=255)
