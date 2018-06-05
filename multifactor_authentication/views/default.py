@@ -43,8 +43,6 @@ def authenticate(request):
 def createSecret(request):
     """
     Create and share a secret for Multi Factor Authentication with an AccountUser
-    :return: The url of the QR code that contains the secret
-    :throws: InvalidValue if the account_user_uuid is not valid
     """
     username = request.matchdict['username']
     secret = pyotp.random_base32()
